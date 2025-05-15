@@ -12,6 +12,8 @@ export const hospitalDatabase: Omit<Hospital, "distance">[] = [
     services: ["طوارئ", "جراحة", "أطفال"],
     openHours: "24 ساعة",
     rating: 4.2,
+    equipment: ["جهاز تنفس صناعي", "أشعة مقطعية", "غرفة عمليات متقدمة", "وحدة عناية مركزة"],
+    trafficFactor: 0.8, // 1.0 is normal traffic, higher means more congestion
   },
   {
     id: 2,
@@ -23,6 +25,8 @@ export const hospitalDatabase: Omit<Hospital, "distance">[] = [
     services: ["طوارئ", "باطنة", "قلب"],
     openHours: "24 ساعة",
     rating: 4.5,
+    equipment: ["جهاز قلب متقدم", "قسطرة قلبية", "أشعة مقطعية", "وحدة عناية مركزة"],
+    trafficFactor: 1.2,
   },
   {
     id: 3,
@@ -34,6 +38,8 @@ export const hospitalDatabase: Omit<Hospital, "distance">[] = [
     services: ["طوارئ", "عظام", "أعصاب"],
     openHours: "24 ساعة",
     rating: 3.9,
+    equipment: ["جهاز رنين مغناطيسي", "أشعة سينية", "جهاز تخطيط أعصاب"],
+    trafficFactor: 0.7,
   },
   {
     id: 4,
@@ -45,6 +51,8 @@ export const hospitalDatabase: Omit<Hospital, "distance">[] = [
     services: ["طوارئ", "نساء وتوليد", "أطفال"],
     openHours: "24 ساعة",
     rating: 4.0,
+    equipment: ["جهاز موجات فوق صوتية", "حضانات أطفال", "وحدة عناية مركزة للأطفال"],
+    trafficFactor: 0.9,
   },
   {
     id: 5,
@@ -56,6 +64,8 @@ export const hospitalDatabase: Omit<Hospital, "distance">[] = [
     services: ["طوارئ", "جراحة", "عيون"],
     openHours: "24 ساعة",
     rating: 3.7,
+    equipment: ["جهاز ليزر للعيون", "أشعة مقطعية", "غرفة عمليات"],
+    trafficFactor: 1.5,
   },
   {
     id: 6,
@@ -67,6 +77,8 @@ export const hospitalDatabase: Omit<Hospital, "distance">[] = [
     services: ["طوارئ", "أسنان", "جلدية"],
     openHours: "24 ساعة",
     rating: 4.1,
+    equipment: ["وحدة أشعة متكاملة", "معمل تحاليل", "جهاز ليزر جلدي"],
+    trafficFactor: 1.3,
   },
   {
     id: 7,
@@ -78,6 +90,8 @@ export const hospitalDatabase: Omit<Hospital, "distance">[] = [
     services: ["طوارئ", "جراحة", "عناية مركزة"],
     openHours: "24 ساعة",
     rating: 4.6,
+    equipment: ["جهاز تنفس صناعي", "أشعة مقطعية", "غرفة عمليات متقدمة", "وحدة عناية مركزة", "جهاز قلب متقدم"],
+    trafficFactor: 0.6,
   },
   {
     id: 8,
@@ -89,6 +103,8 @@ export const hospitalDatabase: Omit<Hospital, "distance">[] = [
     services: ["طوارئ", "قلب", "كلى"],
     openHours: "24 ساعة",
     rating: 4.3,
+    equipment: ["جهاز غسيل كلوي", "قسطرة قلبية", "أشعة مقطعية", "وحدة عناية مركزة"],
+    trafficFactor: 1.0,
   },
   {
     id: 9,
@@ -100,6 +116,8 @@ export const hospitalDatabase: Omit<Hospital, "distance">[] = [
     services: ["طوارئ", "باطنة", "أطفال"],
     openHours: "24 ساعة",
     rating: 4.0,
+    equipment: ["جهاز تنفس صناعي", "حضانات أطفال", "معمل تحاليل متقدم"],
+    trafficFactor: 0.9,
   },
   {
     id: 10,
@@ -111,6 +129,8 @@ export const hospitalDatabase: Omit<Hospital, "distance">[] = [
     services: ["طوارئ", "نساء وتوليد", "أطفال"],
     openHours: "24 ساعة",
     rating: 3.8,
+    equipment: ["جهاز موجات فوق صوتية", "حضانات أطفال", "غرفة عمليات"],
+    trafficFactor: 1.1,
   },
   {
     id: 11,
@@ -122,6 +142,8 @@ export const hospitalDatabase: Omit<Hospital, "distance">[] = [
     services: ["طوارئ", "جراحة", "عظام"],
     openHours: "24 ساعة",
     rating: 4.2,
+    equipment: ["جهاز رنين مغناطيسي", "أشعة سينية", "غرفة عمليات متقدمة"],
+    trafficFactor: 1.4,
   },
   {
     id: 12,
@@ -133,5 +155,7 @@ export const hospitalDatabase: Omit<Hospital, "distance">[] = [
     services: ["طوارئ", "جراحة", "قلب", "أورام"],
     openHours: "24 ساعة",
     rating: 4.7,
+    equipment: ["جهاز تنفس صناعي", "أشعة مقطعية", "جهاز علاج إشعاعي", "وحدة عناية مركزة", "جهاز قلب متقدم"],
+    trafficFactor: 1.2,
   },
 ]

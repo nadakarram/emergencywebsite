@@ -1,27 +1,59 @@
 "use client"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { Phone, MessageCircle } from "lucide-react"
+import ServiceProviders from "@/components/service-providers"
+
+type ServiceCategory = "medical" | "elderly" | "physical" | "emergency" | null
+
+interface ServiceCard {
+  id: string
+  title: string
+  category: ServiceCategory
+  imageUrl: string
+  description: string
+}
 
 export default function Homepage() {
   const router = useRouter()
+  const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>(null)
 
   const handleEmergency = () => {
     router.push("/emergency-form")
   }
 
-  return (
-    <div className="min-h-screen bg-gray-100 rtl">
-      <header className="bg-white p-4 shadow-md">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="text-2xl font-bold text-[rgba(255,22,22,1)]">طوارئ</div>
-          <button onClick={handleEmergency} className="bg-[rgba(255,22,22,1)] text-white py-2 px-4 rounded-lg">
-            طوارئ
-          </button>
-        </div>
-      </header>
+  const serviceCards: ServiceCard[] = [
+    {
+      id: "medical",
+      title: "زيارات الطبيب المنزلية",
+      category: "medical",
+      imageUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jqjvEVTpvFKZiigUHVr0l8kTzWI6jE.png",
+      description: "خدمة زيارات الأطباء المنزلية لتوفير الرعاية الطبية في راحة منزلك",
+    },
+    {
+      id: "elderly",
+      title: "رعاية كبار السن",
+      category: "elderly",
+      imageUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-CIPY67FkGCWAWAg7VOHbjSAcyuNEhK.png",
+      description: "خدمات متخصصة لرعاية كبار السن وتوفير الاحتياجات الخاصة بهم",
+    },
+    {
+      id: "physical",
+      title: "العلاج الطبيعي في المنزل",
+      category: "physical",
+      imageUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Hb30GDtrGDGDAAVX8ft5WWFbfmDLG9.png",
+      description: "جلسات علاج طبيعي متخصصة في منزلك لتسريع التعافي وتحسين الحركة",
+    },
+  ]
 
+  if (selectedCategory) {
+    return <ServiceProviders category={selectedCategory} onBack={() => setSelectedCategory(null)} />
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-100">
       <main className="container mx-auto p-4">
         <section className="mb-8">
           <div className="bg-white rounded-lg overflow-hidden shadow-md">
@@ -33,47 +65,31 @@ export default function Homepage() {
                 </div>
               </div>
 
-              <h3 className="text-lg font-medium mb-4 text-right">:الخدمات المتاحة</h3>
+              <h3 className="text-lg font-medium mb-4">الخدمات المتاحة:</h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <motion.div className="flex flex-col items-center" whileHover={{ scale: 1.05 }}>
-                  <div className="relative w-full h-40 bg-[rgba(255,22,22,1)] rounded-lg flex items-center justify-center mb-2">
-                    <Image
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-05-15%20at%207.13.55%20PM-d8aElTtiE3XDHd8tLABzXK3tZT6Nhj.jpeg"
-                      alt="Home Services"
-                      width={300}
-                      height={200}
-                      className="object-contain"
-                    />
-                  </div>
-                  <span className="text-center">زيارات الطبيب المنزلية</span>
-                </motion.div>
-
-                <motion.div className="flex flex-col items-center" whileHover={{ scale: 1.05 }}>
-                  <div className="relative w-full h-40 bg-[rgba(255,22,22,1)] rounded-lg flex items-center justify-center mb-2">
-                    <Image
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-05-15%20at%207.13.55%20PM-d8aElTtiE3XDHd8tLABzXK3tZT6Nhj.jpeg"
-                      alt="Home Services"
-                      width={300}
-                      height={200}
-                      className="object-contain"
-                    />
-                  </div>
-                  <span className="text-center">العلاج الطبيعي في المنزل</span>
-                </motion.div>
-
-                <motion.div className="flex flex-col items-center" whileHover={{ scale: 1.05 }}>
-                  <div className="relative w-full h-40 bg-[rgba(255,22,22,1)] rounded-lg flex items-center justify-center mb-2">
-                    <Image
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-05-15%20at%207.13.55%20PM-d8aElTtiE3XDHd8tLABzXK3tZT6Nhj.jpeg"
-                      alt="Home Services"
-                      width={300}
-                      height={200}
-                      className="object-contain"
-                    />
-                  </div>
-                  <span className="text-center">رعاية كبار السن</span>
-                </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                {serviceCards.map((card) => (
+                  <motion.div
+                    key={card.id}
+                    className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+                    whileHover={{ scale: 1.03 }}
+                    onClick={() => setSelectedCategory(card.category)}
+                  >
+                    <div className="bg-[rgba(255,22,22,0.1)] p-6 flex justify-center">
+                      <Image
+                        src={card.imageUrl || "/placeholder.svg"}
+                        alt={card.title}
+                        width={120}
+                        height={120}
+                        className="object-contain"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold text-center mb-2">{card.title}</h3>
+                      <p className="text-gray-600 text-sm text-center">{card.description}</p>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
 
               <div className="bg-[rgba(255,22,22,1)] text-white p-4 rounded-lg mb-6">
@@ -84,14 +100,14 @@ export default function Homepage() {
               </div>
 
               <div className="flex flex-col space-y-3">
-                <h3 className="text-lg font-medium mb-2 text-right">:احجز الخدمة الآن</h3>
-                <div className="flex items-center justify-end">
-                  <span className="ml-2">00000:اتصل بنا</span>
-                  <Phone className="h-5 w-5 text-[rgba(255,22,22,1)]" />
+                <h3 className="text-lg font-medium mb-2">احجز الخدمة الآن:</h3>
+                <div className="flex items-center">
+                  <Phone className="h-5 w-5 text-[rgba(255,22,22,1)] ml-2" />
+                  <span>اتصل بنا: 00000</span>
                 </div>
-                <div className="flex items-center justify-end">
-                  <span className="ml-2">000000 :واتساب</span>
-                  <MessageCircle className="h-5 w-5 text-[rgba(255,22,22,1)]" />
+                <div className="flex items-center">
+                  <MessageCircle className="h-5 w-5 text-[rgba(255,22,22,1)] ml-2" />
+                  <span>واتساب: 000000</span>
                 </div>
               </div>
             </div>

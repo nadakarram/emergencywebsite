@@ -9,7 +9,12 @@ import type { Hospital } from "@/types/hospital"
 import { calculateDistance, formatDistance } from "@/utils/distance"
 import { hospitalDatabase } from "@/utils/hospitals-data"
 import { calculateHospitalMatchScore } from "@/utils/condition-service-mapping"
-import { getGoogleMapsUrl } from "@/utils/map-utils"
+import { getGoogleMapsUrl, getGoogleMapsDirectionsUrl } from "@/utils/map-utils"
+import {
+  getRequiredEquipment,
+  calculateEquipmentMatchScore,
+  calculateEstimatedArrivalTime,
+} from "@/utils/equipment-traffic"
 
 // Import map component dynamically to avoid SSR issues
 const HospitalMap = dynamic(() => import("@/components/map"), {
@@ -47,19 +52,22 @@ export default function Hospitals() {
     }
   }, [])
 
-  // Simulate backend search for nearest hospitals
+  // Update the searchNearestHospitals function to include traffic and equipment considerations
   const searchNearestHospitals = async (latitude: number, longitude: number) => {
     setLocationStatus("searching")
 
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 1500))
 
+    // Get Arabic condition names for matching
+    const arabicConditions = patientConditions.map((c) => c.ar)
+
+    // Get required equipment based on conditions
+    const requiredEquipment = getRequiredEquipment(arabicConditions)
+
     // Calculate distances and add to hospital data
     const hospitalsWithDistance = hospitalDatabase.map((hospital) => {
       const distanceValue = calculateDistance(latitude, longitude, hospital.lat, hospital.lng)
-
-      // Get Arabic condition names for matching
-      const arabicConditions = patientConditions.map((c) => c.ar)
 
       // Calculate match score based on patient conditions and hospital services
       const matchScore = calculateHospitalMatchScore(arabicConditions, hospital.services)
@@ -71,32 +79,40 @@ export default function Hospitals() {
         serviceCoverage = (matchedServices.length / requiredServices.length) * 100
       }
 
+      // Calculate equipment match score
+      const equipmentMatchScore = calculateEquipmentMatchScore(requiredEquipment, hospital.equipment)
+
+      // Calculate estimated arrival time considering traffic
+      const estimatedArrivalTime = calculateEstimatedArrivalTime(distanceValue, hospital.trafficFactor || 1.0)
+
+      // Calculate total score for ranking (weighted combination of factors)
+      // Lower distance and traffic are better, higher service and equipment match are better
+      const distanceScore = Math.max(0, 100 - distanceValue * 5) // 0-100 score, lower distance is better
+      const trafficScore = Math.max(0, 100 - (hospital.trafficFactor || 1) * 50) // 0-100 score, lower traffic is better
+
+      // Combined weighted score (adjust weights as needed)
+      const totalScore =
+        distanceScore * 0.3 + // 30% weight for distance
+        trafficScore * 0.2 + // 20% weight for traffic
+        serviceCoverage * 0.25 + // 25% weight for service match
+        equipmentMatchScore * 0.25 // 25% weight for equipment match
+
       return {
         ...hospital,
         distance: formatDistance(distanceValue),
         distanceValue, // Store actual distance for sorting
         matchScore, // Store match score for recommendation
         serviceCoverage, // Store service coverage percentage
-        isRecommended: matchScore >= 70 || serviceCoverage >= 70, // Recommend if match score or service coverage is 70% or higher
+        equipmentMatchScore, // Store equipment match score
+        estimatedArrivalTime, // Store estimated arrival time
+        trafficFactor: hospital.trafficFactor || 1.0,
+        totalScore, // Store total score for ranking
+        isRecommended: matchScore >= 70 || serviceCoverage >= 70 || equipmentMatchScore >= 70, // Recommend if any score is 70% or higher
       }
     })
 
-    // Sort by recommendation first, then by distance
-    hospitalsWithDistance.sort((a, b) => {
-      // If one is recommended and the other isn't, put recommended first
-      if (a.isRecommended && !b.isRecommended) return -1
-      if (!a.isRecommended && b.isRecommended) return 1
-
-      // If both are recommended, sort by service coverage
-      if (a.isRecommended && b.isRecommended) {
-        if (a.serviceCoverage !== b.serviceCoverage) {
-          return b.serviceCoverage - a.serviceCoverage
-        }
-      }
-
-      // If service coverage is the same or both are not recommended, sort by distance
-      return (a.distanceValue || 0) - (b.distanceValue || 0)
-    })
+    // Sort by total score (higher is better)
+    hospitalsWithDistance.sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0))
 
     setHospitals(hospitalsWithDistance)
     setLocationStatus("granted")
@@ -177,10 +193,17 @@ export default function Hospitals() {
       (hospital.services && hospital.services.some((service) => service.includes(searchTerm))),
   )
 
-  // Open hospital location in Google Maps
+  // Update the openInGoogleMaps function to use traffic-aware directions
   const openInGoogleMaps = (hospital: Hospital) => {
-    const url = getGoogleMapsUrl(hospital.lat, hospital.lng, hospital.name)
-    window.open(url, "_blank")
+    if (userLocation) {
+      // Use directions URL with traffic layer if we have user location
+      const url = getGoogleMapsDirectionsUrl(hospital.lat, hospital.lng, hospital.name)
+      window.open(url, "_blank")
+    } else {
+      // Fallback to regular maps URL if no user location
+      const url = getGoogleMapsUrl(hospital.lat, hospital.lng, hospital.name)
+      window.open(url, "_blank")
+    }
   }
 
   return (
@@ -271,7 +294,7 @@ export default function Hospitals() {
                 key={hospital.id}
                 className={`bg-white rounded-lg shadow p-4 ${
                   selectedHospital?.id === hospital.id ? "border-2 border-[rgba(255,22,22,1)]" : ""
-                } ${hospital.isRecommended ? "border-r-4 border-r-green-500" : ""}`}
+                } ${hospital.isRecommended ? "border-r-4 border-r-green-500" : ""} relative`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
@@ -310,6 +333,25 @@ export default function Hospitals() {
                       </div>
                     )}
 
+                    {/* Show equipment if available */}
+                    {hospital.equipment && hospital.equipment.length > 0 && (
+                      <div className="mt-2">
+                        <div className="text-xs text-gray-600 mb-1">الأجهزة المتوفرة:</div>
+                        <div className="flex flex-wrap gap-1">
+                          {hospital.equipment.slice(0, 3).map((item, i) => (
+                            <span key={i} className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">
+                              {item}
+                            </span>
+                          ))}
+                          {hospital.equipment.length > 3 && (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">
+                              +{hospital.equipment.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Show service coverage percentage if available */}
                     {hospital.serviceCoverage > 0 && requiredServices.length > 0 && (
                       <div className="mt-2">
@@ -328,46 +370,93 @@ export default function Hospitals() {
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between mt-3">
-                      <div className="flex items-center">
-                        <Phone className="h-4 w-4 ml-1 text-[rgba(255,22,22,0.8)]" />
-                        <span className="text-gray-800">{hospital.phone}</span>
+                    {/* Show equipment match score if available */}
+                    {hospital.equipmentMatchScore > 0 && (
+                      <div className="mt-1">
+                        <div className="flex items-center">
+                          <div className="text-xs text-gray-600 ml-2">تطابق الأجهزة المطلوبة:</div>
+                          <div className="flex-1 bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-blue-500 h-2 rounded-full"
+                              style={{ width: `${hospital.equipmentMatchScore}%` }}
+                            ></div>
+                          </div>
+                          <div className="text-xs font-medium text-blue-600 mr-2">
+                            {Math.round(hospital.equipmentMatchScore)}%
+                          </div>
+                        </div>
                       </div>
-
-                      <button
-                        className="bg-[rgba(255,22,22,1)] text-white py-2 px-4 rounded-lg mr-2"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          window.location.href = `tel:${hospital.phone.replace(/\D/g, "")}`
-                        }}
-                      >
-                        اتصال
-                      </button>
-                    </div>
+                    )}
 
                     {hospital.rating && (
-                      <div className="flex items-center mt-1">
+                      <div className="flex items-center mt-2">
                         <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
                         <span className="text-sm text-gray-600 mr-1">{hospital.rating}</span>
                       </div>
                     )}
 
-                    <button
-                      className="flex items-center text-xs text-blue-600 bg-blue-50 px-3 py-1.5 rounded mt-3"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        openInGoogleMaps(hospital)
-                      }}
-                    >
-                      <Map className="h-3 w-3 ml-1" />
-                      فتح في خرائط جوجل
-                    </button>
+                    <div className="flex items-center mt-3">
+                      <Phone className="h-4 w-4 ml-1 text-[rgba(255,22,22,0.8)]" />
+                      <span className="text-gray-800">{hospital.phone}</span>
+                    </div>
+
+                    <div className="flex items-center mt-3">
+                      <button
+                        className="flex items-center text-xs text-blue-600 bg-blue-50 px-3 py-1.5 rounded"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          openInGoogleMaps(hospital)
+                        }}
+                      >
+                        <Map className="h-3 w-3 ml-1" />
+                        فتح في خرائط جوجل مع حركة المرور
+                      </button>
+                    </div>
                   </div>
 
                   <div className="flex flex-col items-center mr-4">
                     <span className="text-sm font-bold text-[rgba(255,22,22,1)] mb-2">{hospital.distance}</span>
+
+                    {/* Traffic indicator */}
+                    <div className="flex flex-col items-center">
+                      <div
+                        className={`w-3 h-3 rounded-full mb-1 ${
+                          hospital.trafficFactor <= 0.8
+                            ? "bg-green-500"
+                            : hospital.trafficFactor <= 1.2
+                              ? "bg-yellow-500"
+                              : "bg-red-500"
+                        }`}
+                      ></div>
+                      <span className="text-xs text-gray-600 mb-1">
+                        {hospital.trafficFactor <= 0.8
+                          ? "حركة مرور خفيفة"
+                          : hospital.trafficFactor <= 1.2
+                            ? "حركة مرور متوسطة"
+                            : "حركة مرور كثيفة"}
+                      </span>
+
+                      {/* Estimated arrival time */}
+                      {hospital.estimatedArrivalTime && (
+                        <span className="text-xs font-medium text-gray-800 mt-1">
+                          وقت الوصول: {hospital.estimatedArrivalTime}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
+
+                {/* Call button positioned at the bottom right */}
+                <button
+                  className="absolute bottom-4 left-4 bg-[rgba(255,22,22,1)] hover:bg-[rgba(220,20,20,1)] text-white py-2 px-4 rounded-lg"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    window.location.href = `tel:${hospital.phone.replace(/\D/g, "")}`
+                  }}
+                >
+                  <Phone className="h-4 w-4 ml-1 inline-block" />
+                  اتصال
+                </button>
               </motion.div>
             ))}
 

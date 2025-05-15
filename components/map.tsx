@@ -61,6 +61,7 @@ function ChangeMapView({ coords }: { coords: [number, number] | null }) {
   return null
 }
 
+// Update the map component to show traffic indicators
 export default function HospitalMap({
   hospitals,
   userLocation,
@@ -129,6 +130,31 @@ export default function HospitalMap({
                   {isRecommended && <p className="text-green-600 text-sm font-medium">موصى به لحالتك</p>}
                   <p>{hospital.address}</p>
                   <p className="text-[rgba(255,22,22,1)]">{hospital.distance}</p>
+
+                  {/* Traffic indicator */}
+                  <div className="flex items-center mt-1">
+                    <div
+                      className={`w-2 h-2 rounded-full mr-1 ${
+                        hospital.trafficFactor <= 0.8
+                          ? "bg-green-500"
+                          : hospital.trafficFactor <= 1.2
+                            ? "bg-yellow-500"
+                            : "bg-red-500"
+                      }`}
+                    ></div>
+                    <span className="text-xs">
+                      {hospital.trafficFactor <= 0.8
+                        ? "حركة مرور خفيفة"
+                        : hospital.trafficFactor <= 1.2
+                          ? "حركة مرور متوسطة"
+                          : "حركة مرور كثيفة"}
+                    </span>
+                  </div>
+
+                  {/* Estimated arrival time */}
+                  {hospital.estimatedArrivalTime && (
+                    <p className="text-xs mt-1">وقت الوصول: {hospital.estimatedArrivalTime}</p>
+                  )}
 
                   {onOpenGoogleMaps && (
                     <button
