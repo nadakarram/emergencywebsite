@@ -2,10 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import "./globals.css"
 import Navbar from "@/components/navbar"
-import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
-
-const inter = Inter({ subsets: ["arabic"] })
 
 export const metadata: Metadata = {
   title: "طوارئ - خدمات طبية منزلية",
@@ -20,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl">
-      <body className={`${inter.className} rtl`}>
+      <body className="rtl">
         <ThemeProvider attribute="class" defaultTheme="light">
           <Navbar />
           {children}
