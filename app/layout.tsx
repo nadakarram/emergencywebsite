@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 import Navbar from "@/components/navbar"
 import { ThemeProvider } from "@/components/theme-provider"
+import { LanguageProvider } from "@/contexts/language-context"
 
 export const metadata: Metadata = {
   title: "طوارئ - خدمات طبية منزلية",
@@ -17,10 +18,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl">
-      <body className="rtl">
+      <body>
         <ThemeProvider attribute="class" defaultTheme="light">
-          <Navbar />
-          {children}
+          <LanguageProvider>
+            <Navbar />
+            {children}
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
