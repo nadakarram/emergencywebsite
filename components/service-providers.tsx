@@ -189,10 +189,14 @@ const categoryTitles: Record<string, string> = {
 }
 
 const categoryImages: Record<string, string> = {
-  medical: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jqjvEVTpvFKZiigUHVr0l8kTzWI6jE.png",
-  elderly: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-CIPY67FkGCWAWAg7VOHbjSAcyuNEhK.png",
-  physical: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Hb30GDtrGDGDAAVX8ft5WWFbfmDLG9.png",
-  emergency: "/placeholder.svg?height=120&width=120",
+  medical:
+    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-05-15%20at%2011.18.00%20PM-PHjrDZ17qi1GhdGhphkmaxcJzJOTvo.jpeg",
+  elderly:
+    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-05-15%20at%2011.16.18%20PM-U1AYeoxJqAxyTZiBiEdZeSKSPf2hCb.jpeg",
+  physical:
+    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-05-15%20at%2011.19.31%20PM-9geAIEv5UnbysFExSpZ1ktbVMjVLFk.jpeg",
+  emergency:
+    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Artboard%201%404x-igHwrnmhF1mji1zqZmotGGkICWxZh5.png",
 }
 
 export default function ServiceProviders({ category, onBack }: ServiceProvidersProps) {
@@ -201,13 +205,21 @@ export default function ServiceProviders({ category, onBack }: ServiceProvidersP
   const categoryImage = category ? categoryImages[category] : ""
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 pt-20">
       <div className="flex items-center mb-6">
         <Button variant="ghost" onClick={onBack} className="ml-2">
           <ArrowRight className="h-5 w-5" />
         </Button>
         <div className="flex items-center">
-          <Image src={categoryImage || "/placeholder.svg"} alt={title} width={40} height={40} className="ml-2" />
+          <div className="relative w-10 h-10 ml-2 bg-[rgba(255,22,22,1)] rounded-full flex items-center justify-center">
+            <Image
+              src={categoryImage || "/placeholder.svg"}
+              alt={title}
+              width={24}
+              height={24}
+              className="object-contain filter invert"
+            />
+          </div>
           <h1 className="text-3xl font-bold">{title}</h1>
         </div>
       </div>
@@ -220,8 +232,8 @@ export default function ServiceProviders({ category, onBack }: ServiceProvidersP
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className="overflow-hidden h-full relative">
-              <div className="relative h-48 bg-gray-100 flex items-center justify-center">
+            <Card className="overflow-hidden h-full relative border-[rgba(255,22,22,1)] border">
+              <div className="relative h-48 bg-[rgba(255,22,22,0.1)] flex items-center justify-center">
                 <Image
                   src={provider.image || "/placeholder.svg"}
                   alt={provider.name}
@@ -231,7 +243,7 @@ export default function ServiceProviders({ category, onBack }: ServiceProvidersP
                 />
               </div>
               <CardContent className="p-6">
-                <h2 className="text-xl font-bold mb-1">{provider.name}</h2>
+                <h2 className="text-xl font-bold mb-1 text-[rgba(255,22,22,1)]">{provider.name}</h2>
                 <p className="text-gray-600 mb-4">{provider.specialty}</p>
 
                 {provider.rating && (

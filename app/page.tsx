@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
 
 export default function SplashScreen() {
   const [showSplash, setShowSplash] = useState(true)
@@ -30,14 +31,16 @@ export default function SplashScreen() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8 }}
-            className="relative w-40 h-40 mb-6"
+            className="relative flex flex-col items-center"
           >
-            <div className="flex flex-col items-center">
-              <div className="text-[rgba(255,22,22,1)]" style={{ fontSize: "120px" }}>
-                +
-              </div>
-              <div className="text-3xl font-bold text-black">طوارئ</div>
-            </div>
+            <Image
+              src="/images/emergency-logo.png"
+              alt="Emergency Logo"
+              width={150}
+              height={150}
+              className="object-contain mb-6"
+            />
+            <div className="text-3xl font-bold text-black mt-4">طوارئ</div>
           </motion.div>
           <motion.div
             className="mt-8 w-16 h-1 bg-[rgba(255,22,22,1)]"

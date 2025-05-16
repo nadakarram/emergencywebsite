@@ -216,12 +216,7 @@ export default function EmergencyForm() {
         </motion.button>
 
         <div className="flex flex-col items-center">
-          <div className="text-[rgba(255,22,22,1)]" style={{ fontSize: "100px", lineHeight: "1" }}>
-            +
-          </div>
-          <div className="text-2xl font-bold text-black tracking-wider" style={{ letterSpacing: "0.05em" }}>
-            {t.emergency}
-          </div>
+          <div className="text-3xl font-bold text-[rgba(255,22,22,1)]">{t.emergency}</div>
         </div>
       </div>
 

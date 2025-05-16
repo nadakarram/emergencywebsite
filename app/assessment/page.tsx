@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { ArrowRight, Globe } from "lucide-react"
+import Image from "next/image"
 
 type Step = "bleeding" | "breathing" | "transport" | "confirmation"
 type Language = "ar" | "en"
@@ -99,10 +100,16 @@ export default function Assessment() {
           exit={{ opacity: 0 }}
         >
           <div className="flex flex-col items-center mb-8">
-            <div className="text-[rgba(255,22,22,1)]" style={{ fontSize: "100px", lineHeight: "1" }}>
-              +
+            <div className="mb-2">
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Artboard%201%404x-igHwrnmhF1mji1zqZmotGGkICWxZh5.png"
+                alt="Emergency Logo"
+                width={100}
+                height={100}
+                className="object-contain"
+              />
             </div>
-            <div className="text-2xl font-bold text-black tracking-wider" style={{ letterSpacing: "0.05em" }}>
+            <div className="text-2xl font-bold text-black tracking-wider mt-3" style={{ letterSpacing: "0.05em" }}>
               {t.emergency}
             </div>
           </div>
@@ -172,10 +179,16 @@ export default function Assessment() {
           exit={{ opacity: 0 }}
         >
           <div className="flex flex-col items-center mb-8">
-            <div className="text-[rgba(255,22,22,1)]" style={{ fontSize: "100px", lineHeight: "1" }}>
-              +
+            <div className="mb-2">
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Artboard%201%404x-igHwrnmhF1mji1zqZmotGGkICWxZh5.png"
+                alt="Emergency Logo"
+                width={100}
+                height={100}
+                className="object-contain"
+              />
             </div>
-            <div className="text-2xl font-bold text-black tracking-wider" style={{ letterSpacing: "0.05em" }}>
+            <div className="text-2xl font-bold text-black tracking-wider mt-3" style={{ letterSpacing: "0.05em" }}>
               {t.emergency}
             </div>
           </div>
@@ -245,10 +258,16 @@ export default function Assessment() {
           exit={{ opacity: 0 }}
         >
           <div className="flex flex-col items-center mb-8">
-            <div className="text-[rgba(255,22,22,1)]" style={{ fontSize: "100px", lineHeight: "1" }}>
-              +
+            <div className="mb-2">
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Artboard%201%404x-igHwrnmhF1mji1zqZmotGGkICWxZh5.png"
+                alt="Emergency Logo"
+                width={100}
+                height={100}
+                className="object-contain"
+              />
             </div>
-            <div className="text-2xl font-bold text-black tracking-wider" style={{ letterSpacing: "0.05em" }}>
+            <div className="text-2xl font-bold text-black tracking-wider mt-3" style={{ letterSpacing: "0.05em" }}>
               {t.emergency}
             </div>
           </div>
@@ -310,18 +329,17 @@ export default function Assessment() {
           exit={{ opacity: 0 }}
         >
           <div className="mb-8 flex flex-col items-center">
-            <div className="text-[rgba(255,22,22,1)] text-5xl mb-2">
-              <svg width="100" height="50" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
-                <rect x="10" y="20" width="80" height="20" fill="#ff1616" rx="5" />
-                <rect x="70" y="15" width="15" height="10" fill="#ff1616" rx="2" />
-                <circle cx="25" cy="45" r="5" fill="#ffffff" />
-                <circle cx="75" cy="45" r="5" fill="#ffffff" />
-                <rect x="20" y="10" width="5" height="5" fill="#ff1616" />
-                <rect x="15" y="15" width="15" height="5" fill="#ff1616" />
-              </svg>
+            <div className="mb-2">
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Artboard%201%404x-igHwrnmhF1mji1zqZmotGGkICWxZh5.png"
+                alt="Emergency Logo"
+                width={100}
+                height={100}
+                className="object-contain"
+              />
             </div>
             <div
-              className="text-xl font-bold text-[rgba(255,22,22,1)] tracking-wider"
+              className="text-xl font-bold text-[rgba(255,22,22,1)] tracking-wider mt-3"
               style={{ letterSpacing: "0.05em" }}
             >
               {t.onTheWay}

@@ -29,21 +29,24 @@ export default function Homepage() {
       id: "medical",
       title: "زيارات الطبيب المنزلية",
       category: "medical",
-      imageUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jqjvEVTpvFKZiigUHVr0l8kTzWI6jE.png",
+      imageUrl:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-05-15%20at%2011.18.00%20PM-PHjrDZ17qi1GhdGhphkmaxcJzJOTvo.jpeg",
       description: "خدمة زيارات الأطباء المنزلية لتوفير الرعاية الطبية في راحة منزلك",
     },
     {
       id: "elderly",
       title: "رعاية كبار السن",
       category: "elderly",
-      imageUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-CIPY67FkGCWAWAg7VOHbjSAcyuNEhK.png",
+      imageUrl:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-05-15%20at%2011.16.18%20PM-U1AYeoxJqAxyTZiBiEdZeSKSPf2hCb.jpeg",
       description: "خدمات متخصصة لرعاية كبار السن وتوفير الاحتياجات الخاصة بهم",
     },
     {
       id: "physical",
       title: "العلاج الطبيعي في المنزل",
       category: "physical",
-      imageUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Hb30GDtrGDGDAAVX8ft5WWFbfmDLG9.png",
+      imageUrl:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-05-15%20at%2011.19.31%20PM-9geAIEv5UnbysFExSpZ1ktbVMjVLFk.jpeg",
       description: "جلسات علاج طبيعي متخصصة في منزلك لتسريع التعافي وتحسين الحركة",
     },
   ]
@@ -54,7 +57,7 @@ export default function Homepage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <main className="container mx-auto p-4">
+      <main className="container mx-auto p-4 pt-20">
         <section className="mb-8">
           <div className="bg-white rounded-lg overflow-hidden shadow-md">
             <div className="p-6">
@@ -71,21 +74,22 @@ export default function Homepage() {
                 {serviceCards.map((card) => (
                   <motion.div
                     key={card.id}
-                    className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+                    className="bg-[rgba(255,22,22,1)] rounded-lg shadow-md overflow-hidden cursor-pointer"
                     whileHover={{ scale: 1.03 }}
                     onClick={() => setSelectedCategory(card.category)}
                   >
-                    <div className="bg-[rgba(255,22,22,0.1)] p-6 flex justify-center">
-                      <Image
-                        src={card.imageUrl || "/placeholder.svg"}
-                        alt={card.title}
-                        width={120}
-                        height={120}
-                        className="object-contain"
-                      />
+                    <div className="p-6 flex justify-center">
+                      <div className="relative w-32 h-32">
+                        <Image
+                          src={card.imageUrl || "/placeholder.svg"}
+                          alt={card.title}
+                          fill
+                          className="object-contain filter invert"
+                        />
+                      </div>
                     </div>
-                    <div className="p-4">
-                      <h3 className="text-lg font-bold text-center mb-2">{card.title}</h3>
+                    <div className="p-4 bg-white">
+                      <h3 className="text-lg font-bold text-center mb-2 text-[rgba(255,22,22,1)]">{card.title}</h3>
                       <p className="text-gray-600 text-sm text-center">{card.description}</p>
                     </div>
                   </motion.div>
@@ -118,10 +122,10 @@ export default function Homepage() {
           <div className="bg-white rounded-lg p-6 shadow-md">
             <div className="flex items-center justify-center mb-6">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-05-15%20at%207.13.55%20PM%20%282%29-Fv9h4Hn5ktsP99ZSrfhts1DawaIqZ6.jpeg"
-                alt="Ambulance"
-                width={150}
-                height={150}
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Artboard%201%404x-igHwrnmhF1mji1zqZmotGGkICWxZh5.png"
+                alt="Emergency Logo"
+                width={120}
+                height={120}
                 className="object-contain"
               />
             </div>
