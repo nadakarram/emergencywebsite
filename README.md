@@ -1,30 +1,184 @@
-# emergencywebsite
+# Emergency Medical Services Website
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+![Emergency Services Logo](/public/images/emergency-logo.png)
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/nadakarram2006-2117s-projects/v0-emergencywebsite)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/ZH7PPREa9ds)
+A comprehensive platform connecting users with emergency medical services, home healthcare, elderly care, and physical therapy services.
 
-## Overview
+## 🚀 Features
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+- **Emergency Service Finder**: Find the nearest hospital based on your medical condition
+- **Doctor Visits**: Connect with qualified doctors for home visits
+- **Elderly Care**: Find caregivers specialized in elderly care
+- **Physical Therapy**: Connect with professional physical therapists
+- **Multilingual Support**: Full Arabic and English language support
+- **Responsive Design**: Works on all devices (mobile, tablet, desktop)
+- **Location Services**: Find the nearest service providers
 
-## Deployment
+## 📋 Prerequisites
 
-Your project is live at:
+Before you begin, ensure you have the following installed:
+- [Node.js](https://nodejs.org/) (v18.0.0 or higher)
+- [npm](https://www.npmjs.com/) (v9.0.0 or higher) or [yarn](https://yarnpkg.com/) (v1.22.0 or higher)
+- [Git](https://git-scm.com/)
 
-**[https://vercel.com/nadakarram2006-2117s-projects/v0-emergencywebsite](https://vercel.com/nadakarram2006-2117s-projects/v0-emergencywebsite)**
+## 🔧 Installation
 
-## Build your app
+Follow these steps to get the project running on your local machine:
 
-Continue building your app on:
+1. **Clone the repository**
 
-**[https://v0.dev/chat/projects/ZH7PPREa9ds](https://v0.dev/chat/projects/ZH7PPREa9ds)**
+\`\`\`bash
+git clone https://github.com/yourusername/emergency-services-website.git
+cd emergency-services-website
+\`\`\`
 
-## How It Works
+2. **Install dependencies**
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+\`\`\`bash
+npm install
+# or
+yarn install
+\`\`\`
+
+3. **Run the development server**
+
+\`\`\`bash
+npm run dev
+# or
+yarn dev
+\`\`\`
+
+4. **Open your browser**
+
+Navigate to [http://localhost:3000](http://localhost:3000) to see the application running.
+
+## 🏗️ Project Structure
+
+\`\`\`
+emergency-services-website/
+├── app/                    # Next.js App Router pages
+│   ├── assessment/         # Medical condition assessment
+│   ├── doctor-visits/      # Doctor visits service
+│   ├── elderly-care/       # Elderly care service
+│   ├── emergency-form/     # Emergency form
+│   ├── homepage/           # Homepage
+│   ├── hospitals/          # Hospitals listing
+│   ├── physical-therapy/   # Physical therapy service
+│   ├── globals.css         # Global styles
+│   └── layout.tsx          # Root layout
+├── components/             # Reusable components
+│   ├── ui/                 # UI components (shadcn/ui)
+│   ├── map.tsx             # Map component
+│   ├── navbar.tsx          # Navigation bar
+│   └── service-providers.tsx # Service providers component
+├── contexts/               # React contexts
+│   └── language-context.tsx # Language context for i18n
+├── hooks/                  # Custom React hooks
+├── lib/                    # Utility libraries
+├── public/                 # Static assets
+│   └── images/             # Image assets
+├── styles/                 # Additional styles
+├── types/                  # TypeScript type definitions
+├── utils/                  # Utility functions
+├── next.config.mjs         # Next.js configuration
+├── postcss.config.mjs      # PostCSS configuration
+├── tailwind.config.ts      # Tailwind CSS configuration
+└── tsconfig.json           # TypeScript configuration
+\`\`\`
+
+## 🔄 Available Scripts
+
+- `npm run dev` - Run the development server
+- `npm run build` - Build the application for production
+- `npm start` - Start the production server
+- `npm run lint` - Run ESLint to check code quality
+
+## 🌐 Deployment
+
+This project is configured for easy deployment on [Vercel](https://vercel.com/). Simply connect your GitHub repository to Vercel for automatic deployments.
+
+For other platforms, build the project using:
+
+\`\`\`bash
+npm run build
+# or
+yarn build
+\`\`\`
+
+Then deploy the generated `.next` folder according to your hosting provider's instructions.
+
+## 🧩 Key Components
+
+### Language Context
+
+The application supports both Arabic and English languages using a custom language context:
+
+\`\`\`tsx
+// contexts/language-context.tsx
+import { createContext, useContext, useState, ReactNode } from 'react';
+
+type Language = 'en' | 'ar';
+type Direction = 'ltr' | 'rtl';
+
+interface LanguageContextType {
+  language: Language;
+  direction: Direction;
+  toggleLanguage: () => void;
+  t: (key: string) => string;
+}
+
+// ... rest of the implementation
+\`\`\`
+
+### Service Providers Component
+
+Reusable component for displaying service providers:
+
+\`\`\`tsx
+// components/service-providers.tsx
+import { useLanguage } from '@/contexts/language-context';
+// ... other imports
+
+interface ServiceProviderProps {
+  serviceType: 'doctor' | 'elderly' | 'therapy' | 'emergency';
+  showTitle?: boolean;
+}
+
+// ... component implementation
+\`\`\`
+
+### Map Component
+
+Handles location and mapping functionality:
+
+\`\`\`tsx
+// components/map.tsx
+import { useState, useEffect } from 'react';
+// ... other imports
+
+interface MapProps {
+  hospitals: Hospital[];
+  userLocation: { lat: number; lng: number };
+}
+
+// ... component implementation
+\`\`\`
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📞 Contact
+
+For any questions or support, please contact [your-email@example.com](mailto:your-email@example.com).
+\`\`\`
+
+Now, let's create a detailed code documentation file:
