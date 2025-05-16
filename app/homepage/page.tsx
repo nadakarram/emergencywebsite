@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { Phone, MessageCircle } from "lucide-react"
+import { Phone, MessageCircle, Globe } from "lucide-react"
 import ServiceProviders from "@/components/service-providers"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -28,6 +28,7 @@ const translations = {
     whatsapp: "واتساب:",
     onTheWay: "نحن في الطريق",
     requestAmbulance: "طلب إسعاف",
+    changeLanguage: "English",
   },
   en: {
     availableServices: "Available Services:",
@@ -37,6 +38,7 @@ const translations = {
     whatsapp: "WhatsApp:",
     onTheWay: "We are on the way",
     requestAmbulance: "Request Ambulance",
+    changeLanguage: "العربية",
   },
 }
 
@@ -44,8 +46,7 @@ export default function Homepage() {
   const router = useRouter()
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>(null)
   const [mounted, setMounted] = useState(false)
-  const languageContext = useLanguage()
-  const language = languageContext.language || "ar"
+  const { language, toggleLanguage } = useLanguage()
   const isArabic = language === "ar"
 
   const t = translations[language as keyof typeof translations]
@@ -64,7 +65,7 @@ export default function Homepage() {
       title: "زيارات الطبيب المنزلية",
       titleEn: "Doctor Home Visits",
       category: "medical",
-      imageUrl: "/images/home-care-icon.png",
+      imageUrl: "/images/home-care-logo.png",
       description: "خدمة زيارات الأطباء المنزلية لتوفير الرعاية الطبية في راحة منزلك",
       descriptionEn: "Doctor home visit service to provide medical care in the comfort of your home",
     },
@@ -73,7 +74,7 @@ export default function Homepage() {
       title: "رعاية كبار السن",
       titleEn: "Elderly Care",
       category: "elderly",
-      imageUrl: "/images/elderly-care-icon.png",
+      imageUrl: "/images/elderly-care-logo.png",
       description: "خدمات متخصصة لرعاية كبار السن وتوفير الاحتياجات الخاصة بهم",
       descriptionEn: "Specialized services for elderly care and providing their special needs",
     },
@@ -82,7 +83,7 @@ export default function Homepage() {
       title: "العلاج الطبيعي في المنزل",
       titleEn: "Home Physical Therapy",
       category: "physical",
-      imageUrl: "/images/physical-therapy-icon.png",
+      imageUrl: "/images/physical-therapy-logo.png",
       description: "جلسات علاج طبيعي متخصصة في منزلك لتسريع التعافي وتحسين الحركة",
       descriptionEn: "Specialized physical therapy sessions in your home to speed recovery and improve mobility",
     },
@@ -100,6 +101,17 @@ export default function Homepage() {
   return (
     <div className={`min-h-screen bg-gray-100 ${isArabic ? "rtl" : "ltr"}`}>
       <main className="container mx-auto p-4 pt-20">
+        {/* Language toggle button at the top of the page */}
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center space-x-2 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors"
+          >
+            <Globe className="h-5 w-5" />
+            <span>{t.changeLanguage}</span>
+          </button>
+        </div>
+
         <section className="mb-8">
           <div className="bg-white rounded-lg overflow-hidden shadow-md">
             <div className="p-6">
@@ -126,13 +138,13 @@ export default function Homepage() {
                       }
                     }}
                   >
-                    <div className="flex justify-center items-center bg-[rgba(255,22,22,1)] h-40">
+                    <div className="flex justify-center items-center bg-[rgba(255,22,22,1)] h-40 p-4">
                       <Image
                         src={card.imageUrl || "/placeholder.svg"}
                         alt={isArabic ? card.title : card.titleEn}
                         width={140}
                         height={140}
-                        className="object-contain filter invert"
+                        className="object-contain"
                         style={{ margin: 0, padding: 0 }}
                       />
                     </div>

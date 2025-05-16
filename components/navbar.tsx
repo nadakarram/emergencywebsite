@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Home, Users, Activity, Ambulance, Phone, Globe } from "lucide-react"
+import { Menu, X, Home, Users, Activity, Ambulance, Phone } from "lucide-react"
 import Image from "next/image"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -22,7 +22,6 @@ const translations = {
     physicalTherapy: "العلاج الطبيعي في المنزل",
     emergency: "طوارئ",
     callUs: "اتصل بنا",
-    language: "English",
     services: "الخدمات",
   },
   en: {
@@ -32,14 +31,13 @@ const translations = {
     physicalTherapy: "Home Physical Therapy",
     emergency: "Emergency",
     callUs: "Call Us",
-    language: "العربية",
     services: "Services",
   },
 }
 
 export default function Navbar({ onCategorySelect }: NavbarProps) {
   const router = useRouter()
-  const { language, toggleLanguage } = useLanguage()
+  const { language } = useLanguage()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [isServicesOpen, setIsServicesOpen] = useState(false)
@@ -230,17 +228,6 @@ export default function Navbar({ onCategorySelect }: NavbarProps) {
               <Ambulance className="h-5 w-5" />
               <span>{t.emergency}</span>
             </button>
-
-            {/* Language toggle button - moved to the end */}
-            <button
-              onClick={toggleLanguage}
-              className={`flex items-center ${
-                isArabic ? "space-x-reverse" : ""
-              } space-x-1 bg-gray-200 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-300 transition-colors text-sm`}
-            >
-              <Globe className="h-5 w-5" />
-              <span>{t.language}</span>
-            </button>
           </nav>
 
           {/* Contact button - always visible on desktop */}
@@ -330,17 +317,6 @@ export default function Navbar({ onCategorySelect }: NavbarProps) {
                 <Phone className="h-5 w-5 flex-shrink-0" />
                 <span>{t.callUs}</span>
               </Link>
-
-              {/* Language toggle in mobile menu */}
-              <button
-                onClick={toggleLanguage}
-                className={`flex items-center ${
-                  isArabic ? "space-x-reverse" : ""
-                } space-x-3 px-3 py-2 rounded-md text-base font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 w-full`}
-              >
-                <Globe className="h-5 w-5 flex-shrink-0" />
-                <span>{t.language}</span>
-              </button>
             </div>
           </motion.div>
         )}

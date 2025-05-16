@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { ArrowLeft, Star, Phone } from "lucide-react"
+import { ArrowLeft, Star, Phone, Globe } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 
 const translations = {
@@ -17,6 +17,7 @@ const translations = {
     km: "كم",
     call: "اتصل",
     book: "احجز",
+    changeLanguage: "English",
   },
   en: {
     elderlyCare: "Elderly Care",
@@ -28,6 +29,7 @@ const translations = {
     km: "km",
     call: "Call",
     book: "Book",
+    changeLanguage: "العربية",
   },
 }
 
@@ -45,8 +47,7 @@ interface Provider {
 export default function ElderlyCare() {
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
-  const languageContext = useLanguage()
-  const language = languageContext.language || "ar"
+  const { language, toggleLanguage } = useLanguage()
   const isArabic = language === "ar"
   const t = translations[language as keyof typeof translations]
 
@@ -95,6 +96,17 @@ export default function ElderlyCare() {
   return (
     <div className={`min-h-screen bg-gray-100 ${isArabic ? "rtl" : "ltr"} pt-20`}>
       <div className="container mx-auto px-4">
+        {/* Language toggle button at the top of the page */}
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center space-x-2 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors"
+          >
+            <Globe className="h-5 w-5" />
+            <span>{t.changeLanguage}</span>
+          </button>
+        </div>
+
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="flex items-center mb-6">
             <button
@@ -107,7 +119,10 @@ export default function ElderlyCare() {
           </div>
 
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-bold">{t.elderlyCare}</h1>
+            <div className="flex items-center">
+              <Image src="/images/elderly-care-logo.png" alt="Elderly Care" width={40} height={40} className="mr-2" />
+              <h1 className="text-2xl font-bold">{t.elderlyCare}</h1>
+            </div>
             <div className="bg-[rgba(255,22,22,1)] text-white py-1 px-4 rounded-full text-sm">{t.providers}</div>
           </div>
 

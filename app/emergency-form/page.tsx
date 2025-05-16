@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { ArrowRight, Plus, Globe } from "lucide-react"
 import { getRequiredServices } from "@/utils/condition-service-mapping"
+import { useLanguage } from "@/contexts/language-context"
 
 type Language = "ar" | "en"
 
@@ -20,6 +21,7 @@ const translations = {
     enterCondition: "أدخل الحالة الطارئة",
     done: "تم",
     recommendedServices: "الخدمات الطبية المطلوبة:",
+    changeLanguage: "English",
   },
   en: {
     emergency: "Emergency",
@@ -31,6 +33,7 @@ const translations = {
     enterCondition: "Enter emergency condition",
     done: "Done",
     recommendedServices: "Required medical services:",
+    changeLanguage: "العربية",
   },
 }
 
@@ -49,17 +52,17 @@ export default function EmergencyForm() {
   const [customConditions, setCustomConditions] = useState<{ id: number; ar: string; en: string }[]>([])
   const [newCondition, setNewCondition] = useState("")
   const [showAddForm, setShowAddForm] = useState(false)
-  const [language, setLanguage] = useState<Language>("ar")
   const [requiredServices, setRequiredServices] = useState<string[]>([])
+  const [mounted, setMounted] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
-
-  const t = translations[language]
+  const { language, toggleLanguage } = useLanguage()
   const isArabic = language === "ar"
+  const t = translations[language as keyof typeof translations]
 
-  const toggleLanguage = () => {
-    setLanguage(language === "ar" ? "en" : "ar")
-  }
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const getConditionName = (condition: { ar: string; en: string }) => {
     return language === "ar" ? condition.ar : condition.en
@@ -190,18 +193,23 @@ export default function EmergencyForm() {
     return isArabic ? service : serviceTranslations[service] || service
   }
 
+  // If not mounted yet, return a simple loading state to prevent hydration errors
+  if (!mounted) {
+    return <div className="min-h-screen bg-gray-100"></div>
+  }
+
   return (
     <div className={`min-h-screen bg-white flex flex-col items-center p-6 ${isArabic ? "rtl" : "ltr"}`}>
-      {/* Language toggle button */}
-      <motion.button
-        onClick={toggleLanguage}
-        className="absolute top-4 right-4 bg-gray-200 p-2 rounded-full flex items-center justify-center"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <Globe className="h-5 w-5 text-gray-700" />
-        <span className="ml-1 text-sm">{isArabic ? "English" : "العربية"}</span>
-      </motion.button>
+      {/* Language toggle button at the top of the page */}
+      <div className="w-full max-w-md flex justify-end mb-4">
+        <button
+          onClick={toggleLanguage}
+          className="flex items-center space-x-2 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors"
+        >
+          <Globe className="h-5 w-5" />
+          <span>{t.changeLanguage}</span>
+        </button>
+      </div>
 
       <div className="w-full max-w-md flex justify-between items-center mb-8">
         <motion.button
