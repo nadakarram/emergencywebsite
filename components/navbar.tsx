@@ -8,11 +8,7 @@ import { Menu, X, Home, Users, Activity, Ambulance, Phone } from "lucide-react"
 import Image from "next/image"
 import { useLanguage } from "@/contexts/language-context"
 
-type ServiceCategory = "medical" | "elderly" | "physical" | "emergency" | null
-
-interface NavbarProps {
-  onCategorySelect?: (category: ServiceCategory) => void
-}
+type NavbarProps = {}
 
 const translations = {
   ar: {
@@ -35,7 +31,7 @@ const translations = {
   },
 }
 
-export default function Navbar({ onCategorySelect }: NavbarProps) {
+export default function Navbar({}: NavbarProps) {
   const router = useRouter()
   const { language } = useLanguage()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -75,23 +71,6 @@ export default function Navbar({ onCategorySelect }: NavbarProps) {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
-  const handleCategoryClick = (category: ServiceCategory) => {
-    if (category === "elderly") {
-      router.push("/elderly-care")
-      setIsMenuOpen(false)
-      setIsServicesOpen(false)
-      return
-    }
-
-    if (onCategorySelect) {
-      onCategorySelect(category)
-    } else {
-      router.push("/homepage")
-    }
-    setIsMenuOpen(false)
-    setIsServicesOpen(false)
-  }
 
   const handleEmergency = () => {
     router.push("/emergency-form")
@@ -141,7 +120,7 @@ export default function Navbar({ onCategorySelect }: NavbarProps) {
               href="/homepage"
               className={`flex items-center ${
                 isArabic ? "space-x-reverse" : ""
-              } space-x-1 text-gray-700 hover:text-[rgba(255,22,22,1)] transition-colors px-2 py-2 rounded-md hover:bg-gray-50 text-sm lg:text-base`}
+              } gap-3 text-gray-700 hover:text-[rgba(255,22,22,1)] transition-colors px-2 py-2 rounded-md hover:bg-gray-50 text-sm lg:text-base`}
             >
               <Home className="h-5 w-5" />
               <span className="inline">{t.home}</span>
@@ -161,61 +140,64 @@ export default function Navbar({ onCategorySelect }: NavbarProps) {
 
                 {isServicesOpen && (
                   <div className="absolute top-full mt-1 bg-white rounded-md shadow-lg py-1 z-50 min-w-[200px]">
-                    <button
-                      onClick={() => handleCategoryClick("medical")}
+                    <Link
+                      href="/doctor-visits"
                       className="flex items-center w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsServicesOpen(false)}
                     >
                       <Users className="h-5 w-5 mr-2" />
                       <span>{t.doctorVisits}</span>
-                    </button>
-                    <button
-                      onClick={() => handleCategoryClick("elderly")}
+                    </Link>
+                    <Link
+                      href="/elderly-care"
                       className="flex items-center w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsServicesOpen(false)}
                     >
                       <Activity className="h-5 w-5 mr-2" />
                       <span>{t.elderlyCare}</span>
-                    </button>
-                    <button
-                      onClick={() => handleCategoryClick("physical")}
+                    </Link>
+                    <Link
+                      href="/physical-therapy"
                       className="flex items-center w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsServicesOpen(false)}
                     >
                       <Phone className="h-5 w-5 mr-2" />
                       <span>{t.physicalTherapy}</span>
-                    </button>
+                    </Link>
                   </div>
                 )}
               </div>
             ) : (
               <>
-                <button
-                  onClick={() => handleCategoryClick("medical")}
+                <Link
+                  href="/doctor-visits"
                   className={`flex items-center ${
                     isArabic ? "space-x-reverse" : ""
-                  } space-x-1 text-gray-700 hover:text-[rgba(255,22,22,1)] transition-colors px-2 py-2 rounded-md hover:bg-gray-50 text-sm lg:text-base`}
+                  } gap-3 text-gray-700 hover:text-[rgba(255,22,22,1)] transition-colors px-2 py-2 rounded-md hover:bg-gray-50 text-sm lg:text-base`}
                 >
                   <Users className="h-5 w-5" />
                   <span className="inline">{t.doctorVisits}</span>
-                </button>
+                </Link>
 
-                <button
-                  onClick={() => handleCategoryClick("elderly")}
+                <Link
+                  href="/elderly-care"
                   className={`flex items-center ${
                     isArabic ? "space-x-reverse" : ""
-                  } space-x-1 text-gray-700 hover:text-[rgba(255,22,22,1)] transition-colors px-2 py-2 rounded-md hover:bg-gray-50 text-sm lg:text-base`}
+                  } gap-3 text-gray-700 hover:text-[rgba(255,22,22,1)] transition-colors px-2 py-2 rounded-md hover:bg-gray-50 text-sm lg:text-base`}
                 >
                   <Activity className="h-5 w-5" />
                   <span className="inline">{t.elderlyCare}</span>
-                </button>
+                </Link>
 
-                <button
-                  onClick={() => handleCategoryClick("physical")}
+                <Link
+                  href="/physical-therapy"
                   className={`flex items-center ${
                     isArabic ? "space-x-reverse" : ""
-                  } space-x-1 text-gray-700 hover:text-[rgba(255,22,22,1)] transition-colors px-2 py-2 rounded-md hover:bg-gray-50 text-sm lg:text-base`}
+                  } gap-3 text-gray-700 hover:text-[rgba(255,22,22,1)] transition-colors px-2 py-2 rounded-md hover:bg-gray-50 text-sm lg:text-base`}
                 >
                   <Phone className="h-5 w-5" />
                   <span className="inline">{t.physicalTherapy}</span>
-                </button>
+                </Link>
               </>
             )}
 
@@ -223,7 +205,7 @@ export default function Navbar({ onCategorySelect }: NavbarProps) {
               onClick={handleEmergency}
               className={`flex items-center ${
                 isArabic ? "space-x-reverse" : ""
-              } space-x-1 bg-[rgba(255,22,22,1)] text-white py-2 px-3 lg:px-4 rounded-lg hover:bg-[rgba(220,20,20,1)] transition-colors text-sm lg:text-base`}
+              } gap-3 bg-[rgba(255,22,22,1)] text-white py-2 px-3 lg:px-4 rounded-lg hover:bg-[rgba(220,20,20,1)] transition-colors text-sm lg:text-base`}
             >
               <Ambulance className="h-5 w-5" />
               <span>{t.emergency}</span>
@@ -236,7 +218,7 @@ export default function Navbar({ onCategorySelect }: NavbarProps) {
               href="tel:+123456789"
               className={`flex items-center ${
                 isArabic ? "space-x-reverse" : ""
-              } space-x-1 bg-gray-100 text-gray-800 py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors text-sm`}
+              } gap-3 bg-gray-100 text-gray-800 py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors text-sm`}
             >
               <Phone className="h-5 w-5" />
               <span className="inline">{t.callUs}</span>
@@ -260,48 +242,51 @@ export default function Navbar({ onCategorySelect }: NavbarProps) {
                 href="/homepage"
                 className={`flex items-center ${
                   isArabic ? "space-x-reverse" : ""
-                } space-x-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[rgba(255,22,22,1)] hover:bg-gray-50 w-full`}
+                } gap-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[rgba(255,22,22,1)] hover:bg-gray-50 w-full`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Home className="h-5 w-5 flex-shrink-0" />
                 <span>{t.home}</span>
               </Link>
 
-              <button
-                onClick={() => handleCategoryClick("medical")}
+              <Link
+                href="/doctor-visits"
                 className={`flex items-center ${
                   isArabic ? "space-x-reverse" : ""
-                } space-x-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[rgba(255,22,22,1)] hover:bg-gray-50 w-full`}
+                } gap-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[rgba(255,22,22,1)] hover:bg-gray-50 w-full`}
+                onClick={() => setIsMenuOpen(false)}
               >
                 <Users className="h-5 w-5 flex-shrink-0" />
                 <span>{t.doctorVisits}</span>
-              </button>
+              </Link>
 
-              <button
-                onClick={() => handleCategoryClick("elderly")}
+              <Link
+                href="/elderly-care"
                 className={`flex items-center ${
                   isArabic ? "space-x-reverse" : ""
-                } space-x-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[rgba(255,22,22,1)] hover:bg-gray-50 w-full`}
+                } gap-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[rgba(255,22,22,1)] hover:bg-gray-50 w-full`}
+                onClick={() => setIsMenuOpen(false)}
               >
                 <Activity className="h-5 w-5 flex-shrink-0" />
                 <span>{t.elderlyCare}</span>
-              </button>
+              </Link>
 
-              <button
-                onClick={() => handleCategoryClick("physical")}
+              <Link
+                href="/physical-therapy"
                 className={`flex items-center ${
                   isArabic ? "space-x-reverse" : ""
-                } space-x-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[rgba(255,22,22,1)] hover:bg-gray-50 w-full`}
+                } gap-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[rgba(255,22,22,1)] hover:bg-gray-50 w-full`}
+                onClick={() => setIsMenuOpen(false)}
               >
                 <Phone className="h-5 w-5 flex-shrink-0" />
                 <span>{t.physicalTherapy}</span>
-              </button>
+              </Link>
 
               <button
                 onClick={handleEmergency}
                 className={`flex items-center ${
                   isArabic ? "space-x-reverse" : ""
-                } space-x-3 px-3 py-2 rounded-md text-base font-medium bg-[rgba(255,22,22,1)] text-white hover:bg-[rgba(220,20,20,1)] w-full`}
+                } gap-3 px-3 py-2 rounded-md text-base font-medium bg-[rgba(255,22,22,1)] text-white hover:bg-[rgba(220,20,20,1)] w-full`}
               >
                 <Ambulance className="h-5 w-5 flex-shrink-0" />
                 <span>{t.emergency}</span>
@@ -311,7 +296,7 @@ export default function Navbar({ onCategorySelect }: NavbarProps) {
                 href="tel:+123456789"
                 className={`flex items-center ${
                   isArabic ? "space-x-reverse" : ""
-                } space-x-3 px-3 py-2 rounded-md text-base font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 w-full`}
+                } gap-3 px-3 py-2 rounded-md text-base font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 w-full`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Phone className="h-5 w-5 flex-shrink-0" />

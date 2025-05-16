@@ -204,7 +204,7 @@ export default function EmergencyForm() {
       <div className="w-full max-w-md flex justify-end mb-4">
         <button
           onClick={toggleLanguage}
-          className="flex items-center space-x-2 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors"
+          className="flex items-center gap-3 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors"
         >
           <Globe className="h-5 w-5" />
           <span>{t.changeLanguage}</span>
@@ -214,13 +214,13 @@ export default function EmergencyForm() {
       <div className="w-full max-w-md flex justify-between items-center mb-8">
         <motion.button
           onClick={handleSkip}
-          className="py-2 px-4 rounded-lg bg-gray-200 text-gray-700 flex items-center hover:bg-gray-300 transition-colors"
+          className="py-2 px-4 rounded-lg bg-gray-200 text-gray-700 flex items-center gap-3 hover:bg-gray-300 transition-colors"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          {isArabic ? <ArrowRight className="h-4 w-4 ml-1" /> : null}
+          {isArabic ? <ArrowRight className="h-4 w-4" /> : null}
           <span className="tracking-wider">{t.skip}</span>
-          {!isArabic ? <ArrowRight className="h-4 w-4 mr-1 rotate-180" /> : null}
+          {!isArabic ? <ArrowRight className="h-4 w-4 rotate-180" /> : null}
         </motion.button>
 
         <div className="flex flex-col items-center">
@@ -361,12 +361,12 @@ export default function EmergencyForm() {
           ) : (
             <motion.button
               onClick={handleShowAddForm}
-              className="py-3 px-4 rounded-full border border-gray-300 bg-white text-gray-700 text-center w-full mb-4 flex items-center justify-center tracking-wider"
+              className="py-3 px-4 rounded-full border border-gray-300 bg-white text-gray-700 text-center w-full mb-4 flex items-center justify-center gap-3 tracking-wider"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
               style={{ letterSpacing: "0.05em" }}
             >
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="h-4 w-4" />
               {t.addAnother}
             </motion.button>
           )}

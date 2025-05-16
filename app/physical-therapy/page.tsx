@@ -8,7 +8,7 @@ import { useLanguage } from "@/contexts/language-context"
 
 const translations = {
   ar: {
-    elderlyCare: "رعاية كبار السن",
+    physicalTherapy: "العلاج الطبيعي في المنزل",
     providers: "مقدمي الخدمة",
     back: "العودة",
     years: "سنوات الخبرة",
@@ -18,9 +18,10 @@ const translations = {
     call: "اتصل",
     book: "احجز",
     changeLanguage: "English",
+    specialty: "التخصص",
   },
   en: {
-    elderlyCare: "Elderly Care",
+    physicalTherapy: "Home Physical Therapy",
     providers: "Service Providers",
     back: "Back",
     years: "Years of Experience",
@@ -30,6 +31,7 @@ const translations = {
     call: "Call",
     book: "Book",
     changeLanguage: "العربية",
+    specialty: "Specialty",
   },
 }
 
@@ -37,6 +39,8 @@ interface Provider {
   id: number
   name: string
   nameEn: string
+  specialty: string
+  specialtyEn: string
   image: string
   experience: number
   rating: number
@@ -44,7 +48,7 @@ interface Provider {
   phone: string
 }
 
-export default function ElderlyCare() {
+export default function PhysicalTherapy() {
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
   const { language, toggleLanguage } = useLanguage()
@@ -58,33 +62,39 @@ export default function ElderlyCare() {
   const providers: Provider[] = [
     {
       id: 1,
-      name: "أحمد محمد",
-      nameEn: "Ahmed Mohamed",
-      image: "/images/caregiver-male.png",
-      experience: 5,
+      name: "عبدالله الشمري",
+      nameEn: "Abdullah Al-Shammari",
+      specialty: "علاج طبيعي شامل في المنزل",
+      specialtyEn: "Comprehensive physical therapy at home",
+      image: "/images/therapist-male.png",
+      experience: 9,
       rating: 4.8,
       distance: 2.3,
-      phone: "+123456789",
+      phone: "+966 55 789 0123",
     },
     {
       id: 2,
-      name: "سارة أحمد",
-      nameEn: "Sara Ahmed",
-      image: "/images/caregiver-female.png",
-      experience: 7,
+      name: "ليلى العنزي",
+      nameEn: "Layla Al-Anazi",
+      specialty: "إعادة تأهيل وعلاج طبيعي متنقل",
+      specialtyEn: "Mobile rehabilitation and physical therapy",
+      image: "/images/therapist-male.png",
+      experience: 12,
       rating: 4.9,
       distance: 3.1,
-      phone: "+123456789",
+      phone: "+966 55 890 1234",
     },
     {
       id: 3,
-      name: "محمد علي",
-      nameEn: "Mohamed Ali",
-      image: "/images/caregiver-male.png",
-      experience: 4,
+      name: "يوسف الحربي",
+      nameEn: "Yousef Al-Harbi",
+      specialty: "علاج طبيعي متخصص وتمارين إعادة تأهيل",
+      specialtyEn: "Specialized physical therapy and rehabilitation exercises",
+      image: "/images/therapist-male.png",
+      experience: 10,
       rating: 4.7,
       distance: 1.8,
-      phone: "+123456789",
+      phone: "+966 55 901 2345",
     },
   ]
 
@@ -122,14 +132,14 @@ export default function ElderlyCare() {
             <div className="flex items-center gap-3">
               <div className="relative w-10 h-10 bg-[rgba(255,22,22,1)] rounded-full flex items-center justify-center">
                 <Image
-                  src="/images/elderly-care-logo.png"
-                  alt="Elderly Care"
+                  src="/images/physical-therapy-logo.png"
+                  alt="Physical Therapy"
                   width={24}
                   height={24}
                   className="object-contain"
                 />
               </div>
-              <h1 className="text-2xl font-bold">{t.elderlyCare}</h1>
+              <h1 className="text-2xl font-bold">{t.physicalTherapy}</h1>
             </div>
             <div className="bg-[rgba(255,22,22,1)] text-white py-1 px-4 rounded-full text-sm">{t.providers}</div>
           </div>
@@ -150,6 +160,9 @@ export default function ElderlyCare() {
                     <h3 className="text-xl font-bold text-center md:text-left">
                       {isArabic ? provider.name : provider.nameEn}
                     </h3>
+                    <p className="text-gray-600 text-center md:text-left mt-1">
+                      {isArabic ? provider.specialty : provider.specialtyEn}
+                    </p>
                     <div className="grid grid-cols-3 gap-4 mt-4">
                       <div className="text-center">
                         <p className="text-gray-500 text-sm">{t.years}</p>

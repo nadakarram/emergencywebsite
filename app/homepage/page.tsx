@@ -4,16 +4,15 @@ import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { Phone, MessageCircle, Globe } from "lucide-react"
-import ServiceProviders from "@/components/service-providers"
 import { useLanguage } from "@/contexts/language-context"
 
-type ServiceCategory = "medical" | "elderly" | "physical" | "emergency" | null
+type ServiceCategory = "emergency" | null
 
 interface ServiceCard {
   id: string
   title: string
   titleEn: string
-  category: ServiceCategory
+  route: string
   imageUrl: string
   description: string
   descriptionEn: string
@@ -44,7 +43,6 @@ const translations = {
 
 export default function Homepage() {
   const router = useRouter()
-  const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>(null)
   const [mounted, setMounted] = useState(false)
   const { language, toggleLanguage } = useLanguage()
   const isArabic = language === "ar"
@@ -64,7 +62,7 @@ export default function Homepage() {
       id: "medical",
       title: "زيارات الطبيب المنزلية",
       titleEn: "Doctor Home Visits",
-      category: "medical",
+      route: "/doctor-visits",
       imageUrl: "/images/home-care-logo.png",
       description: "خدمة زيارات الأطباء المنزلية لتوفير الرعاية الطبية في راحة منزلك",
       descriptionEn: "Doctor home visit service to provide medical care in the comfort of your home",
@@ -73,7 +71,7 @@ export default function Homepage() {
       id: "elderly",
       title: "رعاية كبار السن",
       titleEn: "Elderly Care",
-      category: "elderly",
+      route: "/elderly-care",
       imageUrl: "/images/elderly-care-logo.png",
       description: "خدمات متخصصة لرعاية كبار السن وتوفير الاحتياجات الخاصة بهم",
       descriptionEn: "Specialized services for elderly care and providing their special needs",
@@ -82,16 +80,12 @@ export default function Homepage() {
       id: "physical",
       title: "العلاج الطبيعي في المنزل",
       titleEn: "Home Physical Therapy",
-      category: "physical",
+      route: "/physical-therapy",
       imageUrl: "/images/physical-therapy-logo.png",
       description: "جلسات علاج طبيعي متخصصة في منزلك لتسريع التعافي وتحسين الحركة",
       descriptionEn: "Specialized physical therapy sessions in your home to speed recovery and improve mobility",
     },
   ]
-
-  if (selectedCategory) {
-    return <ServiceProviders category={selectedCategory} onBack={() => setSelectedCategory(null)} />
-  }
 
   // If not mounted yet, return a simple loading state to prevent hydration errors
   if (!mounted) {
@@ -105,7 +99,7 @@ export default function Homepage() {
         <div className="flex justify-end mb-4">
           <button
             onClick={toggleLanguage}
-            className="flex items-center space-x-2 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors"
+            className="flex items-center gap-3 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors"
           >
             <Globe className="h-5 w-5" />
             <span>{t.changeLanguage}</span>
@@ -130,13 +124,7 @@ export default function Homepage() {
                     key={card.id}
                     className="rounded-lg shadow-md overflow-hidden cursor-pointer"
                     whileHover={{ scale: 1.03 }}
-                    onClick={() => {
-                      if (card.category === "elderly") {
-                        router.push("/elderly-care")
-                      } else {
-                        setSelectedCategory(card.category)
-                      }
-                    }}
+                    onClick={() => router.push(card.route)}
                   >
                     <div className="flex justify-center items-center bg-[rgba(255,22,22,1)] h-40 p-4">
                       <Image
@@ -170,12 +158,12 @@ export default function Homepage() {
 
               <div className="flex flex-col space-y-3">
                 <h3 className="text-lg font-medium mb-2">{t.bookNow}</h3>
-                <div className="flex items-center">
-                  <Phone className={`h-5 w-5 text-[rgba(255,22,22,1)] ${isArabic ? "ml-2" : "mr-2"}`} />
+                <div className="flex items-center gap-3">
+                  <Phone className="h-5 w-5 text-[rgba(255,22,22,1)]" />
                   <span>{t.callUs} 00000</span>
                 </div>
-                <div className="flex items-center">
-                  <MessageCircle className={`h-5 w-5 text-[rgba(255,22,22,1)] ${isArabic ? "ml-2" : "mr-2"}`} />
+                <div className="flex items-center gap-3">
+                  <MessageCircle className="h-5 w-5 text-[rgba(255,22,22,1)]" />
                   <span>{t.whatsapp} 000000</span>
                 </div>
               </div>
